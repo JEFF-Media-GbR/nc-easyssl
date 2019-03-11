@@ -120,8 +120,12 @@ function check_and_create_config_file() {
 		UNIVERSAL=false
 
 		# Commands that shall be run before and after obtaining certificates
-		PRECOMMAND=""
-		POSTCOMMAND=""
+		PRE_COMMAND=""
+		POST_COMMAND=""
+		
+		# File where to store the credentials for the certbot-dns-netcup plugin.
+		# The file will be automatically created with chmod 700 and will be deleted when the script exits
+		CREDENTIALS_FILE="netcup_credentials.ini"
 
 		# You can define your own certbot options here
 		CERTBOT_COMMAND="certbot certonly
@@ -129,7 +133,7 @@ function check_and_create_config_file() {
         --agree-tos
         --authenticator certbot-dns-netcup:dns-netcup
         --certbot-dns-netcup:dns-netcup-propagation-seconds $PROPAGATION_SECONDS
-        --certbot-dns-netcup:dns-netcup-credentials /root/ssl/netcup_credentials.ini
+        --certbot-dns-netcup:dns-netcup-credentials $CREDENTIALS_FILE
         --server https://acme-v02.api.letsencrypt.org/directory
         -n
         --expand"
@@ -182,6 +186,12 @@ set -f # disable globbing
 create_credential_file
 trap remove_credential_file EXIT SIGTERM SIGINT
 
+if [[ ! -z "$PRE_COMMAND" ]]; then
+	header "Executing PRE_COMMAND"
+	separator "$PRE_COMMAND"
+	$PRE_COMMAND
+fi
+
 while read domains; do
 
 	list=""
@@ -215,6 +225,13 @@ if [[ "$SKIPUNIVERSALCERT" != "yes" ]] && [[ "$UNIVERSAL" == "true" ]]; then
 	checkerror
 fi
 echo
+
+if [[ ! -z "$POST_COMMAND" ]]; then
+	header "Executing POST_COMMAND"
+	separator "$POST_COMMAND"
+	$POST_COMMAND
+fi
+
 header "Done after $SECONDS seconds"
 echo "Certificates obtained: $successes"
 echo "Fails: $fails"
