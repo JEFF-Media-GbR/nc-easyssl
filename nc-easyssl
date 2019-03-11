@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# nc-ssl-helper
-# automatically aquires LetsEncrypt cerfiticates using the netcup dns api
+# nc-easyssl
+# automatically aquires LetsEncrypt cerfiticates using certbot and the certbot-dns-netcup plugin
 
 # configuration is parsed from the config file
 
