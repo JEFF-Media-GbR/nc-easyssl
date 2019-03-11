@@ -16,6 +16,11 @@
 
 VERSION=0.1
 
+cd "$(dirname "${BASH_SOURCE[0]}")" || {
+	echo "ERROR: Could not enter directory $(dirname "${BASH_SOURCE[0]}")"
+	exit 127
+}
+
 for argument in "$@"; do
 	if [[ "$argument" == "--skip-custom-certs" ]]; then
 		SKIPCUSTOMCERTS=yes
@@ -63,11 +68,6 @@ function checkrequirements() {
 			exit 123
 		fi
 	done
-}
-
-cd "$(dirname "${BASH_SOURCE[0]}")" || {
-	echo "ERROR: Could not enter directory $(dirname "${BASH_SOURCE[0]}")"
-	exit 127
 }
 
 function checkerror() {
