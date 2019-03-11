@@ -176,6 +176,8 @@ checkrequirements
 check_and_create_config_file
 check_and_create_domains_file
 if [[ "$setup" -ne 0 ]]; then
+	echo
+	echo "Run this command again after you changed the appropiate file(s)."
 	exit 124
 fi
 
