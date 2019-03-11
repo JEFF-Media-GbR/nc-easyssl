@@ -58,7 +58,7 @@ function checkrequirements() {
 	
 	modules=(setuptools certbot-dns-netcup)
 	for module in "${modules[@]}"; do
-		if [[ $(pip list 2>/dev/null| grep $module | wc -l) -ne 1 ]]; then
+		if [[ $(pip list 2>/dev/null| grep -c "$module") -ne 1 ]]; then
 			echo "ERROR: $module not found. Try 'pip install $module'. Aborting."
 			exit 123
 		fi
