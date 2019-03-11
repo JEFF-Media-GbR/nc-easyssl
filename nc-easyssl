@@ -7,7 +7,7 @@
 
 # ERROR codes
 # 127 could not enter directory of script
-# 126 credentials not set in user file
+# 126 error parsing config.ini
 # 125 unknown argument
 # 124 config.ini or domains.ini not found
 # 123 required command not found
@@ -39,6 +39,11 @@ function check_config() {
 			config_error=true
 		fi
 	done
+	emailregex="^[a-z0-9!#\$%&'*+/=?^_\`{|}~-]+(\.[a-z0-9!#$%&'*+/=?^_\`{|}~-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]([a-z0-9-]*[a-z0-9])?\$"
+	if [[ ! $EMAIL =~ $emailregex ]] ; then
+    		echo "ERROR: Invalid value for EMAIL in the config.ini file."
+		config_error=true
+	fi
 	if [[ "$config_error" == "true" ]]; then
 		exit 126
 	fi
