@@ -61,7 +61,7 @@ function checkrequirements() {
 	for command in "${commands[@]}"; do
 		command -v "$command" >/dev/null 2>&1 || { echo "ERROR: This script requires $command but it's not installed. Aborting." >&2; exit 123; }
 	done
-	command -v pip >/dev/null 2>&1 || { echo "ERROR: This script requires certbot but it's not installed. When using Debian/Ubuntu, try 'apt-get install certbot'. Aborting." >&2; exit 123; }
+	command -v certbot >/dev/null 2>&1 || { echo "ERROR: This script requires certbot but it's not installed. When using Debian/Ubuntu, try 'apt-get install certbot'. Aborting." >&2; exit 123; }
 	command -v pip >/dev/null 2>&1 || { echo "ERROR: This script requires pip but it's not installed. When using Debian/Ubuntu, try 'apt-get install --no-install-recommends python-pip'. Aborting." >&2; exit 123; }
 	
 	modules=(setuptools certbot-dns-netcup)
