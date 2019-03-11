@@ -22,7 +22,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")" || {
 	exit 127
 }
 
-{
 for argument in "$@"; do
 	if [[ "$argument" == "--skip-custom-certs" ]]; then
 		SKIPCUSTOMCERTS=yes
@@ -255,5 +254,4 @@ if [[ "$fails" -gt 0 ]]; then
 fi
 
 exit $fails
-} | tee nc-easyssl.log
 
