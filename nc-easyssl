@@ -87,7 +87,7 @@ function check_and_create_config_file() {
 	if [[ ! -f config.ini ]]; then
 	touch config.ini
 	chmod 700 config.ini
-	cat <<- EOF > config.ini
+	cat <<- 'EOF' > config.ini
 		# You must set an email address for LetsEncrypt
 		EMAIL=""
 
