@@ -33,7 +33,7 @@ done
 function check_config() {
 	config_error=false
 	REQUIRED_VARS=(EMAIL NC_CUSTOMERID NC_APIKEY NC_APIPASSWORD PROPAGATION_SECONDS CERTBOT_COMMAND)
-	for VARIABLE in ${REQUIRED_VARS[@]}; do
+	for VARIABLE in "${REQUIRED_VARS[@]}"; do
 		if [[ -z "${!VARIABLE}" ]]; then
 			echo "ERROR: You did not set $VARIABLE in the config.ini file."
 			config_error=true
@@ -51,7 +51,7 @@ function check_config() {
 
 function checkrequirements() {
 	commands=(certbot)
-	for command in ${commands[@]}; do
+	for command in "${commands[@]}"; do
 		command -v $command >/dev/null 2>&1 || { echo "ERROR: This script requires $command but it's not installed. Aborting." >&2; exit 123; }
 	done
 	command -v pip >/dev/null 2>&1 || { echo "ERROR: This script requires pip but it's not installed. When using Debian/Ubuntu, try 'apt-get install --no-install-recommends python-pip'. Aborting." >&2; exit 123; }
