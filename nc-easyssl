@@ -102,10 +102,10 @@ function check_and_create_config_file() {
 	touch config.ini
 	chmod 700 config.ini
 	cat <<- 'EOF' > config.ini
-		# You must set an email address for LetsEncrypt
+		# You must set an email address for LetsEncrypt.
 		EMAIL=""
 
-		# Insert your NetCup API credentials
+		# Insert your NetCup API credentials.
 		NC_CUSTOMERID=""
 		NC_APIKEY=""
 		NC_APIPASSWORD=""
@@ -113,18 +113,18 @@ function check_and_create_config_file() {
 		# Time to wait after creating DNS records. I recommend setting your domains' TTL to 600 and this value to 900
 		PROPAGATION_SECONDS=900
 
-		# When set to true, create wildcard certs for each given domain name
+		# When set to true, create wildcard certs for each given domain name.
 		WILDCARD=true
 
-		# When set to true, create an additional certificate that combines all your domain names
+		# When set to true, create an additional certificate that combines all your domain names.
 		UNIVERSAL=false
 
-		# Commands that shall be run before and after obtaining certificates
+		# Commands that shall be run before and after obtaining certificates. The commands will be run using 'eval'.
 		PRE_COMMAND=""
 		POST_COMMAND=""
 		
 		# File where to store the credentials for the certbot-dns-netcup plugin.
-		# The file will be automatically created with chmod 700 and will be deleted when the script exits
+		# The file will be automatically created with chmod 700 and will be deleted when the script exits.
 		CREDENTIALS_FILE="netcup_credentials.ini"
 
 		# You can define your own certbot options here
