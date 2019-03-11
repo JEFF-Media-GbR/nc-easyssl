@@ -59,6 +59,7 @@ function set_config_value() {
 	key="$1"
 	shift
 	value="$*"
+	echo "Setting config $key to $value"
 	sed -i '/'$key'=/c'$key'='$value config.ini
 }
 
