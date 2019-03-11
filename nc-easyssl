@@ -49,6 +49,11 @@ function checkrequirements() {
 	for command in $commands; do
 		command -v $command >/dev/null 2>&1 || { echo "ERROR: This script requires $command but it's not installed. Aborting." >&2; exit 123; }
 	done
+	
+	if [[ $(pip list | grep certbot-dns-netcup | wc -l) -ne 1 ]]; then
+		echo "ERROR: certbot-dns-netcup not found. Please install certbot-dns-netcup via pip. Aborting."
+		exit 123
+	fi
 }
 
 cd "$(dirname "${BASH_SOURCE[0]}")" || {
