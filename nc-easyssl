@@ -40,7 +40,6 @@ function check_config() {
 	REQUIRED_VARS=(EMAIL NC_CUSTOMERID NC_APIKEY NC_APIPASSWORD PROPAGATION_SECONDS CERTBOT_COMMAND)
 	for VARIABLE in "${REQUIRED_VARS[@]}"; do
 		if [[ -z "${!VARIABLE}" ]]; then
-			set_config_value $VARIABLE $(read -p "Enter value for ${VARIABLE}: " $VARIABLE)
 			echo "ERROR: You did not set $VARIABLE in the config.ini file."
 			config_error=true
 		fi
@@ -53,14 +52,6 @@ function check_config() {
 	if [[ "$config_error" == "true" ]]; then
 		exit 126
 	fi
-}
-
-function set_config_value() {
-	key="$1"
-	shift
-	value="$*"
-	echo "Setting config $key to $value"
-	sed -i '/'$key'=/c'$key'='$value config.ini
 }
 
 function checkrequirements() {
