@@ -238,7 +238,14 @@ echo "Fails: $fails"
 
 if [[ "$fails" -gt 0 ]]; then
 	echo
-	echo "WARNING: Not all certificates could be obtained."
+	echo "WARNING: Not all certificates could be obtained. Please check the following things:"
+	echo "- Correct E-Mail address in config.ini"
+	echo "- Correct NetCup API credentials in config.ini"
+	echo "- Ensure you only list domains using the NetCup nameservers in domains.txt"
+	echo "- Make sure you use newlines or spaces to seperate domains in domains.txt"
+	echo "- Use Punycode for domains that contain special characters in domains.txt"
+	echo
+	echo "When pasting debug logs, make sure to remove your credentials from the output!"
 fi
 
 exit $fails
