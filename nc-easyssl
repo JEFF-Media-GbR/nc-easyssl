@@ -45,7 +45,7 @@ function check_config() {
 		fi
 	done
 	emailregex="^[a-z0-9!#\$%&'*+/=?^_\`{|}~-]+(\.[a-z0-9!#$%&'*+/=?^_\`{|}~-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]([a-z0-9-]*[a-z0-9])?\$"
-	if [[ ! -z "$EMAIL" ]] && [[ ! $EMAIL =~ $emailregex ]] ; then
+	if [[ -n "$EMAIL" ]] && [[ ! $EMAIL =~ $emailregex ]] ; then
     		echo "ERROR: Invalid value for EMAIL in the config.ini file."
 		config_error=true
 	fi
@@ -186,7 +186,7 @@ set -f # disable globbing
 create_credential_file
 trap remove_credential_file EXIT SIGTERM SIGINT
 
-if [[ ! -z "$PRE_COMMAND" ]]; then
+if [[ -n "$PRE_COMMAND" ]]; then
 	header "Executing PRE_COMMAND"
 	separator "$PRE_COMMAND"
 	$PRE_COMMAND
@@ -226,7 +226,7 @@ if [[ "$SKIPUNIVERSALCERT" != "yes" ]] && [[ "$UNIVERSAL" == "true" ]]; then
 fi
 echo
 
-if [[ ! -z "$POST_COMMAND" ]]; then
+if [[ -n "$POST_COMMAND" ]]; then
 	header "Executing POST_COMMAND"
 	separator "$POST_COMMAND"
 	$POST_COMMAND
