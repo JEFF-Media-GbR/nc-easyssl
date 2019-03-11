@@ -116,8 +116,8 @@ function check_and_create_config_file() {
 		# Time to wait after creating DNS records. I recommend setting your domains' TTL to 600 and this value to 900
 		PROPAGATION_SECONDS=900
 
-		# When set to true, create wildcard certs for each given domain name.
-		WILDCARD=true
+		# When set to true, create wildcard certs for ALL given domain names.
+		WILDCARD=false
 
 		# When set to true, create an additional certificate that combines all your domain names.
 		UNIVERSAL=false
