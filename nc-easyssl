@@ -57,7 +57,7 @@ function checkrequirements() {
 	command -v pip >/dev/null 2>&1 || { echo "ERROR: This script requires pip but it's not installed. When using Debian/Ubuntu, try 'apt-get install --no-install-recommends python-pip'. Aborting." >&2; exit 123; }
 	
 	modules=(setuptools certbot-dns-netcup)
-	for module in ${modules[@]}; do
+	for module in "${modules[@]}"; do
 		if [[ $(pip list 2>/dev/null| grep $module | wc -l) -ne 1 ]]; then
 			echo "ERROR: $module not found. Try 'pip install $module'. Aborting."
 			exit 123
