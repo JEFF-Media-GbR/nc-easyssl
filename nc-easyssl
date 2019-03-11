@@ -140,7 +140,7 @@ function check_and_create_domains_file() {
 fi
 }
 function check_domains_file() {
-	if [[ $(grep '*' domains.txt | wc -l) -gt 0 ]]; then
+	if [[ $(grep '*' domains.ini | wc -l) -gt 0 ]]; then
 		echo "ERROR: At least one of your domains contains the wildcard character '*'. You must disable the WILDCARD option in the config.ini file or remove the wildcard domain from your domains.ini file."
 		exit 122
 	fi
@@ -186,7 +186,7 @@ while read domains; do
 		echo
 		header "Obtaining certificate"
 		separator "$list"
-		echo $CERTBOT_COMMAND $list
+		$CERTBOT_COMMAND $list
 		checkerror
 		echo
 	fi
@@ -197,7 +197,7 @@ if [[ "$SKIPUNIVERSALCERT" != "yes" ]] && [[ "$UNIVERSAL" == "true" ]]; then
 	echo
 	header "Obtaining universal certificate"
 	separator "$fulllist"
-	echo $CERTBOT_COMMAND --cert-name universal $fulllist
+	$CERTBOT_COMMAND --cert-name universal $fulllist
 	checkerror
 fi
 echo
