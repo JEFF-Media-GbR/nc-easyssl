@@ -129,7 +129,7 @@ function checkrequirements() {
 	for module in "${modules[@]}"; do
 		if [[ $(pip list 2>/dev/null| grep -c "$module") -ne 1 ]]; then
 			if [[ "$AUTOINSTALL" == "yes" ]]; then
-				pip install $module
+				pip install "$module"
 			else
 				echo "ERROR: $module not found. Try 'pip install $module' or use the '--auto-install' argument. Aborting."
 				exit 123
