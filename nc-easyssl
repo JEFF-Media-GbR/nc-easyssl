@@ -15,7 +15,7 @@
 # 121 finished auto update
 # other: number of certificate requests that have failed
 
-VERSION=0.1
+VERSION=0.2
 NAME="nc-easyssl"
 REPO="https://github.com/mfnalex/nc-easyssl"
 
@@ -28,7 +28,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")" || {
 }
 
 function auto_update() {
-	command -v git >/dev/null 2>&1 || { echo "ERROR: This script requires git but it's not installed. When using Debian/Ubuntu, try 'apt-get install git'. Aborting." >&2; exit 123; }
+	command -v git >/dev/null 2>&1 || { echo "ERROR: Updating requires git but it's not installed. When using Debian/Ubuntu, try 'apt-get install git'. Aborting." >&2; exit 123; }
 	tmp_dir=$(mktemp -d)
 	trap "rm -rf '$tmp_dir'" EXIT SIGINT SIGTERM
 	git -C "$tmp_dir" clone "$REPO"
