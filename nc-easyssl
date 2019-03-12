@@ -328,7 +328,7 @@ if [[ "$exitcode" -gt 100 ]]; then
 	exitcode=100
 fi
 
-if [[ "$deubg" == "true" ]]; then
+if [[ "$debug" == "true" ]]; then
 	debug_warning
 fi
 exit $exitcode
