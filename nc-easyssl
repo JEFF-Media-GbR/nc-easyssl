@@ -32,8 +32,8 @@ function auto_update() {
 	tmp_dir=$(mktemp -d)
 	trap "rm -rf '$tmp_dir'" EXIT SIGINT SIGTERM
 	git -C "$tmp_dir" clone "$REPO"
-	chmod +x "$tmp_dir"/nc-easyssl
-	mv "$tmp_dir"/nc-easyssl ./
+	chmod +x "$tmp_dir"/nc-easyssl/nc-easyssl
+	mv "$tmp_dir"/nc-easyssl/nc-easyssl ./
 	echo "Auto-Update done."
 	exit 121
 }
