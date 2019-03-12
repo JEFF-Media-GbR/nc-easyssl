@@ -13,7 +13,7 @@
 # 123 required command not found
 # 122 error parsing domains.ini
 # 121 finished auto update
-# other: number of certificate requests that have failed
+# <=100: number of certificate requests that have failed. When more than 100 certificates failed, it will return 100 anyway
 
 VERSION=0.2
 NAME="nc-easyssl"
@@ -281,5 +281,9 @@ if [[ "$fails" -gt 0 ]]; then
 	echo "When pasting debug logs, make sure to remove your credentials from the output!"
 fi
 
-exit $fails
+exitcode=$fails
+if [[ "$exitcode" -gt 100 ]]; then
+	exitcode=100
+fi
+exit $exitcode
 
