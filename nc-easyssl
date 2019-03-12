@@ -13,6 +13,7 @@
 # 123 required command not found
 # 122 error parsing domains.ini
 # 121 finished auto update
+# 120 error while auto-installing requirements
 # <=100: number of certificate requests that have failed. When more than 100 certificates failed, it will return 100 anyway
 
 VERSION=0.2
