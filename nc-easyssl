@@ -8,32 +8,60 @@
 # ERROR codes
 # 127 could not enter directory of script
 # 126 error parsing config.ini
-# 125 unknown argument
+# 125 error parsing arguments
 # 124 config.ini or domains.ini not found
 # 123 required command not found
 # 122 error parsing domains.ini
+# 121 finished auto update
 # other: number of certificate requests that have failed
 
 VERSION=0.1
+NAME="nc-easyssl"
+REPO="https://github.com/mfnalex/nc-easyssl"
 
+echo $NAME Ver. $VERSION
+echo
 
 cd "$(dirname "${BASH_SOURCE[0]}")" || {
 	echo "ERROR: Could not enter directory $(dirname "${BASH_SOURCE[0]}")"
 	exit 127
 }
 
-for argument in "$@"; do
-	if [[ "$argument" == "--skip-custom-certs" ]]; then
+function auto_update() {
+	command -v git >/dev/null 2>&1 || { echo "ERROR: This script requires git but it's not installed. When using Debian/Ubuntu, try 'apt-get install git'. Aborting." >&2; exit 123; }
+	tmp_dir=$(mktemp -d)
+	trap "rm -rf '$tmp_dir'" EXIT SIGINT SIGTERM
+	git clone -C "$tmp_dir" "$REPO"
+	chmod +x "$tmp_dir"/nc-easyssl
+	mv "$tmp_dir"/nc-easyssl ./
+	echo "Auto-Update done."
+	exit 121
+}
+
+args_processed=0
+if [[ "'$*'" == "--update" ]]; then
+	UPDATE=true
+	auto_update
+	shift
+	args_processed=$((args_processed+1))
+fi
+while [[ -n "$1" ]]; do 
+	if [[ "$1" == "--update" ]]; then
+		echo "ERROR: Cannot use --update with other arguments"
+		exit 125
+	elif [[ "$1" == "--skip-custom-certs" ]]; then
 		SKIPCUSTOMCERTS=yes
-	elif [[ "$argument" == "--skip-universal-cert" ]]; then
+	elif [[ "$1" == "--skip-universal-cert" ]]; then
 		SKIPUNIVERSALCERT=yes
-	elif [[ "$argument" == "--debug" ]]; then
+	elif [[ "$1" == "--debug" ]]; then
 		echo "WARNING: Debug mode activated. Output will contain your credentials!"
 		set -x
 	else
 		echo "ERROR: Unknown argument $argument"
 		exit 125
 	fi
+	shift
+	args_processed=$((args_processed+1))
 done
 
 function check_config() {
@@ -165,6 +193,10 @@ function check_domains_file() {
 		exit 122
 	fi
 }
+
+if [[ "$UPDATE" == "true" ]]; then
+	exit 121
+fi
 
 successes=0
 fails=0
