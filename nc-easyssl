@@ -38,17 +38,14 @@ function auto_update() {
 	exit 121
 }
 
-args_processed=0
-if [[ "'$*'" == "--update" ]]; then
-	UPDATE=true
-	auto_update
-	shift
-	args_processed=$((args_processed+1))
-fi
 while [[ -n "$1" ]]; do 
-	if [[ "$1" == "--update" ]]; then
+	if [[ "$1" == "--update" ]] && [[ "$#" -ne 1 ]]; then
 		echo "ERROR: Cannot use --update with other arguments"
 		exit 125
+	elif [[ "$1" == "--update" ]] && [[ "$#" -eq 1 ]]; then
+		UPDATE=true
+		auto_update
+		shift
 	elif [[ "$1" == "--skip-custom-certs" ]]; then
 		SKIPCUSTOMCERTS=yes
 	elif [[ "$1" == "--skip-universal-cert" ]]; then
@@ -61,7 +58,6 @@ while [[ -n "$1" ]]; do
 		exit 125
 	fi
 	shift
-	args_processed=$((args_processed+1))
 done
 
 function check_config() {
