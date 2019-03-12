@@ -50,6 +50,8 @@ while [[ -n "$1" ]]; do
 		SKIPCUSTOMCERTS=yes
 	elif [[ "$1" == "--skip-universal-cert" ]]; then
 		SKIPUNIVERSALCERT=yes
+	elif [[ "$1" == "--auto-install" ]]; then
+		AUTOINSTALL=yes
 	elif [[ "$1" == "--debug" ]]; then
 		echo "WARNING: Debug mode activated. Output will contain your credentials!"
 		set -x
@@ -82,10 +84,38 @@ function check_config() {
 function checkrequirements() {
 	commands=()
 	for command in "${commands[@]}"; do
-		command -v "$command" >/dev/null 2>&1 || { echo "ERROR: This script requires $command but it's not installed. Aborting." >&2; exit 123; }
+		command -v "$command" >/dev/null 2>&1 || {
+			echo "ERROR: This script requires $command but it's not installed. Aborting." >&2
+			exit 123
+		}
 	done
-	command -v certbot >/dev/null 2>&1 || { echo "ERROR: This script requires certbot but it's not installed. When using Debian/Ubuntu, try 'apt-get install certbot'. Aborting." >&2; exit 123; }
-	command -v pip >/dev/null 2>&1 || { echo "ERROR: This script requires pip but it's not installed. When using Debian/Ubuntu, try 'apt-get install --no-install-recommends python-pip'. Aborting." >&2; exit 123; }
+	command -v certbot >/dev/null 2>&1 || {
+		if [[ "$AUTOINSTALL" == "yes" ]]; then
+			apt-get install -y certbot || {
+				echo "ERROR: Could not install certbot via apt-get."; exit 120
+			}  
+		else
+			echo "ERROR: This script requires certbot but it's not installed. When using Debian/Ubuntu, try 'apt-get install certbot'. Aborting." >&2
+			exit 123
+		fi
+	}
+	command -v pip >/dev/null 2>&1 || {
+		if [[ "$AUTOINSTALL" == "yes" ]]; then
+			apt-get install -y --no-install-recommends python-pip || {
+				echo "ERROR: Could not install python-pip via apt-get."; exit 120
+			}  
+		else
+			echo "ERROR: This script requires pip but it's not installed. When using Debian/Ubuntu, try 'apt-get install --no-install-recommends python-pip'. Aborting." >&2
+			exit 123
+		fi
+	}
+	if [[ "$AUTOINSTALL" == "yes" ]]; then
+		command -v git >/dev/null 2>&1 || {
+			apt-get install -y git || {
+				echo "ERROR: Could not install git via apt-get."; exit 120
+			}
+		}
+	fi
 	
 	modules=(setuptools certbot-dns-netcup)
 	for module in "${modules[@]}"; do
