@@ -20,12 +20,18 @@ VERSION=0.2
 NAME="nc-easyssl"
 REPO="https://github.com/mfnalex/nc-easyssl"
 
+debug=false
+
 echo $NAME Ver. $VERSION
 echo
 
 cd "$(dirname "${BASH_SOURCE[0]}")" || {
 	echo "ERROR: Could not enter directory $(dirname "${BASH_SOURCE[0]}")"
 	exit 127
+}
+
+function debug_warning() {
+	echo -e "\e[91mWARNING: Debug mode activated. Output will contain your credentials!\e[39m"
 }
 
 function auto_update() {
@@ -54,7 +60,8 @@ while [[ -n "$1" ]]; do
 	elif [[ "$1" == "--auto-install" ]]; then
 		AUTOINSTALL=yes
 	elif [[ "$1" == "--debug" ]]; then
-		echo "WARNING: Debug mode activated. Output will contain your credentials!"
+		debug_warning
+		debug=true
 		set -x
 	else
 		echo "ERROR: Unknown argument $1"
@@ -319,6 +326,10 @@ fi
 exitcode=$fails
 if [[ "$exitcode" -gt 100 ]]; then
 	exitcode=100
+fi
+
+if [[ "$deubg" == "true" ]]; then
+	debug_warning
 fi
 exit $exitcode
 
