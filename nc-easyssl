@@ -29,7 +29,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")" || {
 }
 
 function auto_update() {
-	command -v git >/dev/null 2>&1 || { echo "ERROR: Updating requires git but it's not installed. When using Debian/Ubuntu, try 'apt-get install git'. Aborting." >&2; exit 123; }
+	command -v git >/dev/null 2>&1 || { echo "ERROR: Updating requires git but it's not installed. When using Debian/Ubuntu, try 'apt-get install git' or use the '--auto-install' argument. Aborting." >&2; exit 123; }
 	tmp_dir=$(mktemp -d)
 	trap 'rm -rf "$tmp_dir"' EXIT SIGINT SIGTERM
 	git -C "$tmp_dir" clone "$REPO"
@@ -96,7 +96,7 @@ function checkrequirements() {
 				echo "ERROR: Could not install certbot via apt-get."; exit 120
 			}  
 		else
-			echo "ERROR: This script requires certbot but it's not installed. When using Debian/Ubuntu, try 'apt-get install certbot'. Aborting." >&2
+			echo "ERROR: This script requires certbot but it's not installed. When using Debian/Ubuntu, try 'apt-get install certbot' or use the '--auto-install' argument. Aborting." >&2
 			exit 123
 		fi
 	}
@@ -106,7 +106,7 @@ function checkrequirements() {
 				echo "ERROR: Could not install python-pip via apt-get."; exit 120
 			}  
 		else
-			echo "ERROR: This script requires pip but it's not installed. When using Debian/Ubuntu, try 'apt-get install --no-install-recommends python-pip'. Aborting." >&2
+			echo "ERROR: This script requires pip but it's not installed. When using Debian/Ubuntu, try 'apt-get install --no-install-recommends python-pip' or use the '--auto-install' argument. Aborting." >&2
 			exit 123
 		fi
 	}
@@ -121,8 +121,12 @@ function checkrequirements() {
 	modules=(setuptools certbot-dns-netcup)
 	for module in "${modules[@]}"; do
 		if [[ $(pip list 2>/dev/null| grep -c "$module") -ne 1 ]]; then
-			echo "ERROR: $module not found. Try 'pip install $module'. Aborting."
-			exit 123
+			if [[ "$AUTOINSTALL" == "yes" ]]; then
+				pip install $module
+			else
+				echo "ERROR: $module not found. Try 'pip install $module' or use the '--auto-install' argument. Aborting."
+				exit 123
+			fi
 		fi
 	done
 }
