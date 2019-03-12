@@ -312,7 +312,7 @@ echo "Fails: $fails"
 
 if [[ "$fails" -gt 0 ]]; then
 	echo
-	echo "WARNING: Not all certificates could be obtained. Please check the following things:"
+	echo "WARNING: Not all certificates could be obtained. Please check the following:"
 	echo "- Correct E-Mail address in config.ini"
 	echo "- Correct NetCup API credentials in config.ini"
 	echo "- Set your PROPAGATION_SECONDS in config.ini higher than the TTL of your domains"
