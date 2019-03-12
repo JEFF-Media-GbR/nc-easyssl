@@ -30,7 +30,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")" || {
 function auto_update() {
 	command -v git >/dev/null 2>&1 || { echo "ERROR: Updating requires git but it's not installed. When using Debian/Ubuntu, try 'apt-get install git'. Aborting." >&2; exit 123; }
 	tmp_dir=$(mktemp -d)
-	trap "rm -rf '$tmp_dir'" EXIT SIGINT SIGTERM
+	trap 'rm -rf "$tmp_dir"' EXIT SIGINT SIGTERM
 	git -C "$tmp_dir" clone "$REPO"
 	chmod +x "$tmp_dir"/nc-easyssl/nc-easyssl
 	mv "$tmp_dir"/nc-easyssl/nc-easyssl ./
@@ -54,7 +54,7 @@ while [[ -n "$1" ]]; do
 		echo "WARNING: Debug mode activated. Output will contain your credentials!"
 		set -x
 	else
-		echo "ERROR: Unknown argument $argument"
+		echo "ERROR: Unknown argument $1"
 		exit 125
 	fi
 	shift
