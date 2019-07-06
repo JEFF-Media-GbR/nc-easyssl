@@ -16,7 +16,7 @@
 # 120 error while auto-installing requirements
 # <=100: number of certificate requests that have failed. When more than 100 certificates failed, it will return 100 anyway
 
-VERSION=0.2
+VERSION=0.3
 NAME="nc-easyssl"
 REPO="https://github.com/mfnalex/nc-easyssl"
 
@@ -232,6 +232,22 @@ function check_domains_file() {
 	fi
 }
 
+function exec_pre_cmd() {
+	if [[ -n "$PRE_COMMAND" ]]; then
+		header "Executing PRE_COMMAND"
+		separator "$PRE_COMMAND"
+		$PRE_COMMAND
+	fi
+}
+
+function exec_post_cmd() {
+	if [[ -n "$POST_COMMAND" ]]; then
+		header "Executing POST_COMMAND"
+		separator "$POST_COMMAND"
+		$POST_COMMAND
+	fi
+}
+
 if [[ "$UPDATE" == "true" ]]; then
 	exit 121
 fi
@@ -260,12 +276,6 @@ set -f # disable globbing
 create_credential_file
 trap remove_credential_file EXIT SIGTERM SIGINT
 
-if [[ -n "$PRE_COMMAND" ]]; then
-	header "Executing PRE_COMMAND"
-	separator "$PRE_COMMAND"
-	$PRE_COMMAND
-fi
-
 while read domains; do
 
 	list=""
@@ -282,10 +292,12 @@ while read domains; do
 
 	if [[ "$SKIPCUSTOMCERTS" != "yes" ]]; then
 		echo
+		exec_pre_cmd
 		header "Obtaining certificate"
 		separator "$list"
 		$CERTBOT_COMMAND $list
 		checkerror
+		exec_post_cmd
 		echo
 	fi
 
@@ -293,18 +305,16 @@ done <domains.ini
 
 if [[ "$SKIPUNIVERSALCERT" != "yes" ]] && [[ "$UNIVERSAL" == "true" ]]; then
 	echo
+	exec_pre_cmd
 	header "Obtaining universal certificate"
 	separator "$fulllist"
 	$CERTBOT_COMMAND --cert-name universal $fulllist
 	checkerror
+	exec_post_cmd
 fi
 echo
 
-if [[ -n "$POST_COMMAND" ]]; then
-	header "Executing POST_COMMAND"
-	separator "$POST_COMMAND"
-	$POST_COMMAND
-fi
+
 
 header "Done after $SECONDS seconds"
 echo "Certificates obtained: $successes"
